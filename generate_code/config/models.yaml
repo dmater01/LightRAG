@@ -1,0 +1,13 @@
+models:
+  openai:
+    api_key_env: "OPENAI_API_KEY"
+    default_model: "gpt-3.5-turbo-instruct" # Using instruct model as base for injection often works better for demo, or gpt-4
+    temperature: 0.1
+  
+  local:
+    # Using a smaller model for reproduction feasibility if GPU not available, 
+    # but plan mentions Llama-2-13b. I'll set a default that can be overridden.
+    default_model: "meta-llama/Llama-2-7b-chat-hf" 
+    device: "cuda" # or "cpu"
+    temperature: 0.1
+    max_new_tokens: 100

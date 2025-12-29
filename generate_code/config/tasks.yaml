@@ -1,0 +1,73 @@
+tasks:
+  mrpc:
+    name: "Duplicate Sentence Detection"
+    dataset_name: "glue"
+    subset: "mrpc"
+    prompt_template: "Are the following two sentences equivalent? Answer yes or no.\nSentence 1: {text1}\nSentence 2: {text2}\nAnswer:"
+    input_fields: ["sentence1", "sentence2"]
+    label_map: {0: "no", 1: "yes"}
+    task_type: "classification"
+
+  jfleg:
+    name: "Grammar Correction"
+    dataset_name: "jfleg"
+    subset: null
+    prompt_template: "You are an English grammatical error correction tool. Please correct the following sentence:\n{text}\nCorrection:"
+    input_fields: ["sentence"]
+    label_map: null
+    task_type: "generation"
+
+  hsol:
+    name: "Hate Speech Detection"
+    dataset_name: "hate_speech_offensive"
+    subset: null
+    prompt_template: "Your task is to check if a message contains hateful content. Answer yes or no.\nMessage: {text}\nAnswer:"
+    input_fields: ["tweet"]
+    label_map: {0: "yes", 1: "yes", 2: "no"} # 0: hate speech, 1: offensive, 2: neither. Mapping 0/1 to yes (hateful/offensive) for binary simplicity or strictly following paper if they distinguish. Paper says "Hate Detection". Usually 0 is hate. Let's assume binary detection of hate/offensive vs safe.
+    # Note: The paper description says "Hate Detection". HSOL has 3 classes. 
+    # Class 0: hate speech, Class 1: offensive language, Class 2: neither.
+    # Often 0 and 1 are grouped as "toxic" vs 2 "non-toxic". 
+    # Let's map 0->yes, 1->yes, 2->no for now, or strictly 0->yes. 
+    # Given the prompt "hateful content", usually implies hate speech. 
+    # I will map 0->yes, 1->no, 2->no to be strict about "hate", or check if paper specifies. 
+    # Re-reading plan: "Hate Detection (HSOL)". 
+    # I'll stick to a binary mapping where 0 (hate) is yes, and others are no, unless I see evidence otherwise. 
+    # Actually, let's map 0 and 1 to "yes" (unsafe) and 2 to "no" (safe) as a common practice, but I'll stick to 0->yes (hate), 1->no (offensive but not hate), 2->no (neither) to be precise about "Hate".
+    # Wait, usually safety filters catch both. Let's use 0->yes, 1->yes, 2->no.
+    task_type: "classification"
+
+  rte:
+    name: "Natural Language Inference"
+    dataset_name: "glue"
+    subset: "rte"
+    prompt_template: "Are the following two sentences entailment? Answer yes or no.\nSentence 1: {text1}\nSentence 2: {text2}\nAnswer:"
+    input_fields: ["sentence1", "sentence2"]
+    label_map: {0: "yes", 1: "no"} # RTE: 0=entailment, 1=not_entailment
+    task_type: "classification"
+
+  sst2:
+    name: "Sentiment Analysis"
+    dataset_name: "glue"
+    subset: "sst2"
+    prompt_template: "Given the following text, what is the sentiment? Answer positive or negative.\nText: {text}\nAnswer:"
+    input_fields: ["sentence"]
+    label_map: {0: "negative", 1: "positive"}
+    task_type: "classification"
+
+  sms:
+    name: "Spam Detection"
+    dataset_name: "sms_spam"
+    subset: null
+    prompt_template: "Given the following text message, answer spam or not spam.\nMessage: {text}\nAnswer:"
+    input_fields: ["sms"]
+    label_map: {0: "not spam", 1: "spam"}
+    task_type: "classification"
+
+  gigaword:
+    name: "Summarization"
+    dataset_name: "gigaword"
+    subset: null
+    prompt_template: "Please write me a short and brief summary of the following text:\n{text}\nSummary:"
+    input_fields: ["document"]
+    label_map: null
+    task_type: "generation"
